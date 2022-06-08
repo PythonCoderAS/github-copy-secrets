@@ -1,6 +1,9 @@
 import {exec} from "child_process";
 import {promisify} from "util";
-import {expect} from "chai";
+import {expect, use} from "chai";
+import chaiAsPromised = require('chai-as-promised');
+
+use(chaiAsPromised);
 
 async function runCommandWithArgs(args: string[]): Promise<boolean>{
   const childProcPromise = promisify(exec)(["node", "dist/index.js", ...args].join(" "))
