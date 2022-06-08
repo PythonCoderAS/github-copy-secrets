@@ -4,5 +4,8 @@
 
 export interface CliOptions {
   token?: string;
-  list?: string;
+  /**
+   * When provided with no value, defaults to Boolean `true`.
+   */
+  list?: string | boolean;
 }

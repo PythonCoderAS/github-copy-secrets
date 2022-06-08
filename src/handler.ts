@@ -6,7 +6,7 @@ import filterAsync from "node-filter-async";
 import {crypto_box_seal} from "libsodium-wrappers";
 
 export default async function handler(secretsDirectory: string, owner: string, repository: string, opts: CliOptions): Promise<void> {
-  const listOn = getBooleanFromString(opts.list);
+  const listOn = typeof opts.list === "boolean" ? opts.list : getBooleanFromString(opts.list)
   const token = getToken(opts.token);
   if (!token) {
     console.error("A token is required!");
