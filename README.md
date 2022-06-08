@@ -1,2 +1,2 @@
 # github-copy-secrets
-Copy given secrets to a repository
+Copy given secrets to a repository.
