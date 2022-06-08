@@ -4,8 +4,12 @@
   "description": "Copy given secrets to a repository.",
   "main": "src/index.js",
   "type": "commonjs",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --require ts-node/register test.ts",
+    "build": "tsc -b",
+    "lint": "prettier --check . && eslint . --ext .ts --config .eslintrc",
+    "lint-fix": "prettier --write . && eslint . --ext .ts --config .eslintrc --fix"
   },
   "bin": {
     "github-copy-secrets": "./dist/index.js"
