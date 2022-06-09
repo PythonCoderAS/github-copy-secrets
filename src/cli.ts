@@ -1,6 +1,7 @@
 import * as sade from "sade";
-import { version } from "./package.json";
 import handler from "./handler";
+
+const { version } = require("../package.json");
 
 const cli = sade(
   "github-copy-secrets <secretsDirectory> <owner> <repository>",
