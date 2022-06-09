@@ -1,12 +1,20 @@
-import {CliOptions} from "./types";
-import {getBooleanFromString, getToken} from "./utils";
-import {Octokit} from "@octokit/rest";
-import {stat, readdir, readFile} from "fs/promises";
+import { CliOptions } from "./types";
+import { getBooleanFromString, getToken } from "./utils";
+import { Octokit } from "@octokit/rest";
+import { stat, readdir, readFile } from "fs/promises";
 import filterAsync from "node-filter-async";
-import {crypto_box_seal} from "libsodium-wrappers";
+import { crypto_box_seal } from "libsodium-wrappers";
 
-export default async function handler(secretsDirectory: string, owner: string, repository: string, opts: CliOptions): Promise<void> {
-  const listOn = typeof opts.list === "boolean" ? opts.list : getBooleanFromString(opts.list)
+export default async function handler(
+  secretsDirectory: string,
+  owner: string,
+  repository: string,
+  opts: CliOptions
+): Promise<void> {
+  const listOn =
+    typeof opts.list === "boolean"
+      ? opts.list
+      : getBooleanFromString(opts.list);
   const token = getToken(opts.token);
   if (!token) {
     console.error("A token is required!");
@@ -16,35 +24,47 @@ export default async function handler(secretsDirectory: string, owner: string, r
     auth: token,
     userAgent: "github-copy-secrets",
   });
-  const files = await filterAsync(await readdir(secretsDirectory), async (file) => {
-    return !file.startsWith(".") && (await stat(`${secretsDirectory}/${file}`)).isFile();
-  });
-  const secretData = await Promise.all(files.map(async (file) => {
-    return {
-      name: file.replace(/\.[^/.]+$/, ""), // Removes file extension
-      value: await readFile(`${secretsDirectory}/${file}`),
-    };
-  }));
+  const files = await filterAsync(
+    await readdir(secretsDirectory),
+    async (file) => {
+      return (
+        !file.startsWith(".") &&
+        (await stat(`${secretsDirectory}/${file}`)).isFile()
+      );
+    }
+  );
+  const secretData = await Promise.all(
+    files.map(async (file) => {
+      return {
+        name: file.replace(/\.[^/.]+$/, ""), // Removes file extension
+        value: await readFile(`${secretsDirectory}/${file}`),
+      };
+    })
+  );
   if (listOn) {
     console.log(`Copying ${secretData.length} secrets:`);
     secretData.forEach((secret) => {
       console.log(secret.name);
-    })
+    });
   }
-  const {key, key_id} = (await octokit.actions.getRepoPublicKey({
-    owner,
-    repo: repository,
-  })).data;
-  const keyBytes = Buffer.from(key, 'base64');
-  await Promise.all(secretData.map(async (secret) => {
-    const sealed = crypto_box_seal(secret.value, keyBytes);
-    const encrypted = Buffer.from(sealed).toString('base64');
-    await octokit.rest.actions.createOrUpdateRepoSecret({
+  const { key, key_id } = (
+    await octokit.actions.getRepoPublicKey({
       owner,
       repo: repository,
-      secret_name: secret.name,
-      encrypted_value: encrypted,
-      key_id
-    });
-  }));
+    })
+  ).data;
+  const keyBytes = Buffer.from(key, "base64");
+  await Promise.all(
+    secretData.map(async (secret) => {
+      const sealed = crypto_box_seal(secret.value, keyBytes);
+      const encrypted = Buffer.from(sealed).toString("base64");
+      await octokit.rest.actions.createOrUpdateRepoSecret({
+        owner,
+        repo: repository,
+        secret_name: secret.name,
+        encrypted_value: encrypted,
+        key_id,
+      });
+    })
+  );
 }

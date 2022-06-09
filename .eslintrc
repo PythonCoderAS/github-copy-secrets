@@ -1,7 +1,7 @@
 {
   "extends": [
-    "@pythoncoderas/oclif",
-    "@pythoncoderas/oclif-typescript",
-    "prettier"
+    "prettier",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended"
   ]
 }
