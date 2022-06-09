@@ -11,7 +11,7 @@ async function runCommandWithArgs(args: string[]): Promise<boolean> {
   );
   try {
     await childProcPromise;
-    // eslint-disable-next-line no-explicit-any -- Specific error types are *still* not supported by TypeScript.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Specific error types are *still* not supported by TypeScript.
   } catch (e: any) {
     return false;
   }
