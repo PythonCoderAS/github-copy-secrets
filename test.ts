@@ -15,8 +15,10 @@ async function runCommandWithArgs(args: string[]): Promise<boolean> {
   } catch (e: any) {
     return false;
   }
+
   return true;
 }
+
 describe("github-copy-secrets tests", () => {
   it("should not run with no arguments", () =>
     expect(runCommandWithArgs([])).to.eventually.equal(false));

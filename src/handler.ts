@@ -1,9 +1,9 @@
-import { CliOptions } from "./types";
-import { getBooleanFromString, getToken } from "./utils";
 import { Octokit } from "@octokit/rest";
 import { stat, readdir, readFile } from "fs/promises";
 import filterAsync from "node-filter-async";
 import { crypto_box_seal } from "libsodium-wrappers";
+import { getBooleanFromString, getToken } from "./utils";
+import { CliOptions } from "./types";
 
 export default async function handler(
   secretsDirectory: string,
@@ -20,26 +20,23 @@ export default async function handler(
     console.error("A token is required!");
     process.exit(1);
   }
+
   const octokit = new Octokit({
     auth: token,
     userAgent: "github-copy-secrets",
   });
   const files = await filterAsync(
     await readdir(secretsDirectory),
-    async (file) => {
-      return (
-        !file.startsWith(".") &&
-        (await stat(`${secretsDirectory}/${file}`)).isFile()
-      );
-    }
+    async (file) =>
+      !file.startsWith(".") &&
+      (await stat(`${secretsDirectory}/${file}`)).isFile()
   );
   const secretData = await Promise.all(
-    files.map(async (file) => {
-      return {
-        name: file.replace(/\.[^/.]+$/, ""), // Removes file extension
-        value: await readFile(`${secretsDirectory}/${file}`),
-      };
-    })
+    files.map(async (file) => ({
+      // Removes file extension
+      name: file.replace(/\.[^/.]+$/, ""),
+      value: await readFile(`${secretsDirectory}/${file}`),
+    }))
   );
   if (listOn) {
     console.log(`Copying ${secretData.length} secrets:`);
@@ -47,7 +44,8 @@ export default async function handler(
       console.log(secret.name);
     });
   }
-  const { key, key_id } = (
+
+  const { key, key_id: keyId } = (
     await octokit.actions.getRepoPublicKey({
       owner,
       repo: repository,
@@ -63,7 +61,7 @@ export default async function handler(
         repo: repository,
         secret_name: secret.name,
         encrypted_value: encrypted,
-        key_id,
+        keyId,
       });
     })
   );

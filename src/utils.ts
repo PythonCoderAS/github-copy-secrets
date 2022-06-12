@@ -12,12 +12,10 @@ import "dotenv/config";
  * All other values are true.
  * @param value The string to convert to a boolean.
  * @returns A boolean value.
+ * @todo Pull out to own package.
  */
 export function getBooleanFromString(value?: string | null): boolean {
   switch (value?.toLowerCase()) {
-    default:
-      return true;
-
     case "false":
     case "f":
     case "no":
@@ -27,6 +25,8 @@ export function getBooleanFromString(value?: string | null): boolean {
     case null:
     case undefined:
       return false;
+    default:
+      return true;
   }
 }
 
