@@ -61,7 +61,7 @@ export default async function handler(
         repo: repository,
         secret_name: secret.name,
         encrypted_value: encrypted,
-        keyId,
+        key_id: keyId,
       });
     })
   );
