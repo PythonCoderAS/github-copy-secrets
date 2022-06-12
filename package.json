@@ -2,7 +2,7 @@
   "name": "github-copy-secrets",
   "version": "1.0.0",
   "description": "Copy given secrets to a repository.",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "type": "commonjs",
   "types": "dist/index.d.ts",
   "scripts": {
