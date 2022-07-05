@@ -1,5 +1,3 @@
-import "dotenv/config";
-
 /**
  * Gets a boolean from a string inputs. A string is considered false if it is the following strings:
  * - "false"

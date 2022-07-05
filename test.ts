@@ -1,7 +1,7 @@
 import { exec } from "child_process";
 import { promisify } from "util";
 import { expect, use } from "chai";
-import chaiAsPromised = require("chai-as-promised");
+import * as chaiAsPromised from "chai-as-promised";
 
 use(chaiAsPromised);
 
