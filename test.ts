@@ -1,6 +1,6 @@
 import { expect, use } from "chai";
 import * as chaiAsPromised from "chai-as-promised";
-import {runScript} from "subprocess-test-utils";
+import { runScript } from "subprocess-test-utils";
 
 use(chaiAsPromised);
 
