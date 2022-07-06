@@ -1,21 +1,11 @@
-import { exec } from "child_process";
-import { promisify } from "util";
 import { expect, use } from "chai";
 import * as chaiAsPromised from "chai-as-promised";
+import {runScript} from "subprocess-test-utils";
 
 use(chaiAsPromised);
 
 async function runCommandWithArgs(args: string[]): Promise<boolean> {
-  const childProcPromise = promisify(exec)(
-    ["node", "dist/index.js", ...args].join(" ")
-  );
-  try {
-    await childProcPromise;
-  } catch (e: unknown) {
-    return false;
-  }
-
-  return true;
+  return runScript("node", ["dist/index.js", ...args]);
 }
 
 describe("github-copy-secrets tests", () => {
