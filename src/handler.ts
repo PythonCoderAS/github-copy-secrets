@@ -1,10 +1,11 @@
 import { Octokit } from "@octokit/rest";
-import { stat, readdir, readFile } from "fs/promises";
-import filterAsync from "node-filter-async";
-import { crypto_box_seal } from "libsodium-wrappers";
 import getToken from "@pythoncoderas/get-github-token";
-import { getBooleanFromString } from "./utils";
+import { readFile, readdir, stat } from "fs/promises";
+import { crypto_box_seal } from "libsodium-wrappers";
+import filterAsync from "node-filter-async";
+
 import { CliOptions } from "./types";
+import { getBooleanFromString } from "./utils";
 
 export default async function handler(
   secretsDirectory: string,

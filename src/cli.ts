@@ -1,4 +1,5 @@
 import * as sade from "sade";
+
 import handler from "./handler";
 
 const { version, description } = require("../package.json");
