@@ -32,7 +32,7 @@
   },
   "homepage": "https://github.com/PythonCoderAS/github-copy-secrets#readme",
   "dependencies": {
-    "@octokit/rest": "^19.0.1",
+    "@octokit/rest": "^20.0.1",
     "@pythoncoderas/get-github-token": "^1.0.0",
     "libsodium-wrappers": "^0.7.10",
     "node-filter-async": "^2.0.0",
